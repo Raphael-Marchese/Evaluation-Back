@@ -18,11 +18,8 @@ class Movie
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 
-    #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'movies')]
-    private Collection $realisator;
-
     #[ORM\Column]
-    private ?\DateTimeImmutable $releast_at = null;
+    private ?\DateTimeImmutable $release_at = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poster = null;
@@ -31,9 +28,12 @@ class Movie
     #[ORM\JoinColumn(nullable: false)]
     private ?Genre $genre = null;
 
+    #[ORM\OneToMany(mappedBy: 'movie', targetEntity: MoviePerson::class)]
+    private Collection $moviePeople;
+
     public function __construct()
     {
-        $this->realisator = new ArrayCollection();
+        $this->moviePeople = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,38 +53,14 @@ class Movie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Person>
-     */
-    public function getRealisator(): Collection
+    public function getReleaseAt(): ?\DateTimeImmutable
     {
-        return $this->realisator;
+        return $this->release_at;
     }
 
-    public function addRealisator(Person $realisator): self
+    public function setReleaseAt(\DateTimeImmutable $release_at): self
     {
-        if (!$this->realisator->contains($realisator)) {
-            $this->realisator->add($realisator);
-        }
-
-        return $this;
-    }
-
-    public function removeRealisator(Person $realisator): self
-    {
-        $this->realisator->removeElement($realisator);
-
-        return $this;
-    }
-
-    public function getReleastAt(): ?\DateTimeImmutable
-    {
-        return $this->releast_at;
-    }
-
-    public function setReleastAt(\DateTimeImmutable $releast_at): self
-    {
-        $this->releast_at = $releast_at;
+        $this->release_at = $release_at;
 
         return $this;
     }
@@ -109,6 +85,36 @@ class Movie
     public function setGenre(?Genre $genre): self
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MoviePerson>
+     */
+    public function getMoviePeople(): Collection
+    {
+        return $this->moviePeople;
+    }
+
+    public function addMoviePerson(MoviePerson $moviePerson): self
+    {
+        if (!$this->moviePeople->contains($moviePerson)) {
+            $this->moviePeople->add($moviePerson);
+            $moviePerson->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMoviePerson(MoviePerson $moviePerson): self
+    {
+        if ($this->moviePeople->removeElement($moviePerson)) {
+            // set the owning side to null (unless already changed)
+            if ($moviePerson->getMovie() === $this) {
+                $moviePerson->setMovie(null);
+            }
+        }
 
         return $this;
     }

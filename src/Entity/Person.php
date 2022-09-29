@@ -25,12 +25,12 @@ class Person
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $birthDate = null;
 
-    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'realisator')]
-    private Collection $movies;
+    #[ORM\ManyToMany(targetEntity: MoviePerson::class, mappedBy: 'person')]
+    private Collection $moviePeople;
 
     public function __construct()
     {
-        $this->movies = new ArrayCollection();
+        $this->moviePeople = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,27 +75,27 @@ class Person
     }
 
     /**
-     * @return Collection<int, Movie>
+     * @return Collection<int, MoviePerson>
      */
-    public function getMovies(): Collection
+    public function getMoviePeople(): Collection
     {
-        return $this->movies;
+        return $this->moviePeople;
     }
 
-    public function addMovie(Movie $movie): self
+    public function addMoviePerson(MoviePerson $moviePerson): self
     {
-        if (!$this->movies->contains($movie)) {
-            $this->movies->add($movie);
-            $movie->addRealisator($this);
+        if (!$this->moviePeople->contains($moviePerson)) {
+            $this->moviePeople->add($moviePerson);
+            $moviePerson->addPerson($this);
         }
 
         return $this;
     }
 
-    public function removeMovie(Movie $movie): self
+    public function removeMoviePerson(MoviePerson $moviePerson): self
     {
-        if ($this->movies->removeElement($movie)) {
-            $movie->removeRealisator($this);
+        if ($this->moviePeople->removeElement($moviePerson)) {
+            $moviePerson->removePerson($this);
         }
 
         return $this;
