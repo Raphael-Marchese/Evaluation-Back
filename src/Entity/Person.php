@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ActorRepository;
+use App\Repository\PersonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ActorRepository::class)]
-class Actor
+#[ORM\Entity(repositoryClass: PersonRepository::class)]
+class Person
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,7 +25,7 @@ class Actor
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $birthDate = null;
 
-    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actor')]
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'realisator')]
     private Collection $movies;
 
     public function __construct()
@@ -86,7 +86,7 @@ class Actor
     {
         if (!$this->movies->contains($movie)) {
             $this->movies->add($movie);
-            $movie->addActor($this);
+            $movie->addRealisator($this);
         }
 
         return $this;
@@ -95,7 +95,7 @@ class Actor
     public function removeMovie(Movie $movie): self
     {
         if ($this->movies->removeElement($movie)) {
-            $movie->removeActor($this);
+            $movie->removeRealisator($this);
         }
 
         return $this;

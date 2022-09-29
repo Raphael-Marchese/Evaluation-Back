@@ -15,10 +15,10 @@ class Genre
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 40)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $icon = null;
 
     #[ORM\OneToMany(mappedBy: 'genre', targetEntity: Movie::class)]
@@ -51,7 +51,7 @@ class Genre
         return $this->icon;
     }
 
-    public function setIcon(?string $icon): self
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
 

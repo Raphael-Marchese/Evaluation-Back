@@ -18,14 +18,11 @@ class Movie
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 
-    #[ORM\ManyToMany(targetEntity: Realisator::class, inversedBy: 'movies')]
+    #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'movies')]
     private Collection $realisator;
 
-    #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
-    private Collection $actor;
-
     #[ORM\Column]
-    private ?\DateTimeImmutable $release_at = null;
+    private ?\DateTimeImmutable $releast_at = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poster = null;
@@ -37,7 +34,6 @@ class Movie
     public function __construct()
     {
         $this->realisator = new ArrayCollection();
-        $this->actor = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -58,14 +54,14 @@ class Movie
     }
 
     /**
-     * @return Collection<int, Realisator>
+     * @return Collection<int, Person>
      */
     public function getRealisator(): Collection
     {
         return $this->realisator;
     }
 
-    public function addRealisator(Realisator $realisator): self
+    public function addRealisator(Person $realisator): self
     {
         if (!$this->realisator->contains($realisator)) {
             $this->realisator->add($realisator);
@@ -74,45 +70,21 @@ class Movie
         return $this;
     }
 
-    public function removeRealisator(Realisator $realisator): self
+    public function removeRealisator(Person $realisator): self
     {
         $this->realisator->removeElement($realisator);
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Actor>
-     */
-    public function getActor(): Collection
+    public function getReleastAt(): ?\DateTimeImmutable
     {
-        return $this->actor;
+        return $this->releast_at;
     }
 
-    public function addActor(Actor $actor): self
+    public function setReleastAt(\DateTimeImmutable $releast_at): self
     {
-        if (!$this->actor->contains($actor)) {
-            $this->actor->add($actor);
-        }
-
-        return $this;
-    }
-
-    public function removeActor(Actor $actor): self
-    {
-        $this->actor->removeElement($actor);
-
-        return $this;
-    }
-
-    public function getReleaseAt(): ?\DateTimeImmutable
-    {
-        return $this->release_at;
-    }
-
-    public function setReleaseAt(\DateTimeImmutable $release_at): self
-    {
-        $this->release_at = $release_at;
+        $this->releast_at = $releast_at;
 
         return $this;
     }
