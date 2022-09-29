@@ -1,18 +1,28 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\Movie;
+use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/movie', name: 'movie_')]
 class MovieController extends AbstractController
 {
-    #[Route('/movie', name: 'app_movie')]
-    public function index(): Response
+
+    public function __construct(private MovieRepository $movieRepository)
     {
-        return $this->render('movie/index.html.twig', [
-            'controller_name' => 'MovieController',
+
+    }
+    #[Route('', name: 'list')]
+    public function list(): Response
+    {
+        /* Stocker la totalité des films et les trier par ordre alphabétique pour le catalogue */
+        $movies = $this->movieRepository-> findBy([], ['title' => 'ASC']);
+            dump(($movies));
+            return $this->render('movie/list.html.twig', [
+            'movies' => $movies
         ]);
     }
 }

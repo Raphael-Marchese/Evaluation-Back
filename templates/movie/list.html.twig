@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue{% endblock %}
+
+{% block body %}
+    <div class="d-grid gap-3 m-3">
+        {% for movie in movies %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ asset('images/movies/' ~ movie.poster) }}" class="card-img-top" alt="Affiche du film {{ movie.title }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ movie.title }}</h5>
+
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Date de sortie : {{ movie.releaseAt|date("d/m/Y") }}</li>
+                <li class="list-group-item">Genre : {{ movie.genre }}</li>
+                <li class="list-group-item">A third item</li>
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

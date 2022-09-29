@@ -31,6 +31,7 @@ class Movie
     #[ORM\OneToMany(mappedBy: 'movie', targetEntity: MoviePerson::class)]
     private Collection $moviePeople;
 
+
     public function __construct()
     {
         $this->moviePeople = new ArrayCollection();
@@ -118,4 +119,7 @@ class Movie
 
         return $this;
     }
+
+
+
 }

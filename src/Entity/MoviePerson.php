@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\MoviePersonRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MoviePersonRepository::class)]
@@ -19,16 +17,10 @@ class MoviePerson
     private array $role = [];
 
     #[ORM\ManyToOne(inversedBy: 'moviePeople')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Movie $movie = null;
 
-    #[ORM\ManyToMany(targetEntity: Person::class, inversedBy: 'moviePeople')]
-    private Collection $person;
-
-    public function __construct()
-    {
-        $this->person = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'moviePeople')]
+    private ?Person $person = null;
 
     public function getId(): ?int
     {
@@ -59,26 +51,14 @@ class MoviePerson
         return $this;
     }
 
-    /**
-     * @return Collection<int, Person>
-     */
-    public function getPerson(): Collection
+    public function getPerson(): ?Person
     {
         return $this->person;
     }
 
-    public function addPerson(Person $person): self
+    public function setPerson(?Person $person): self
     {
-        if (!$this->person->contains($person)) {
-            $this->person->add($person);
-        }
-
-        return $this;
-    }
-
-    public function removePerson(Person $person): self
-    {
-        $this->person->removeElement($person);
+        $this->person = $person;
 
         return $this;
     }

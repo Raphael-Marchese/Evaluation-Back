@@ -25,8 +25,11 @@ class Person
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $birthDate = null;
 
-    #[ORM\ManyToMany(targetEntity: MoviePerson::class, mappedBy: 'person')]
+    #[ORM\OneToMany(mappedBy: 'person', targetEntity: MoviePerson::class)]
     private Collection $moviePeople;
+
+
+
 
     public function __construct()
     {
@@ -86,7 +89,7 @@ class Person
     {
         if (!$this->moviePeople->contains($moviePerson)) {
             $this->moviePeople->add($moviePerson);
-            $moviePerson->addPerson($this);
+            $moviePerson->setPerson($this);
         }
 
         return $this;
@@ -95,9 +98,14 @@ class Person
     public function removeMoviePerson(MoviePerson $moviePerson): self
     {
         if ($this->moviePeople->removeElement($moviePerson)) {
-            $moviePerson->removePerson($this);
+            // set the owning side to null (unless already changed)
+            if ($moviePerson->getPerson() === $this) {
+                $moviePerson->setPerson(null);
+            }
         }
 
         return $this;
     }
+
+
 }
