@@ -17,6 +17,17 @@
     <body>
     {{ include('/component/header.html.twig') }}
     <main>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+
+                <div class="notification {{ label }} bg-success text-light text-center">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endfor %}
+
         {% block body %}{% endblock %}
     </main>
     </body>

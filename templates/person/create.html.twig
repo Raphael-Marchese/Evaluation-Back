@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une personne{% endblock %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block body %}
+<div class="d-flex container flex-column">
+    <h1 class="text-center">Création de personne</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.firstname) }}
+    {{ form_row(form.birthDate) }}
+    <button class="btn btn-outline-success w-25 align-self-end" >Ajouter</button>
+    {{ form_end(form) }}
+
+</div>
+{% endblock %}
